@@ -5,371 +5,490 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
+    android:overScrollMode="never"
     tools:context=".UI.DocHieuTestNhanhActivity">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="24dp">
+
+        <!-- Toolbar with gradient background -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/lavender"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            tools:ignore="MissingConstraints">
+            android:layout_height="64dp"
+            android:background="@drawable/gradient_toolbar_bg"
+            android:elevation="6dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <TextView
-                android:id="@+id/tvArrowBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/baseline_arrow_back_ios_24"
-                android:gravity="center">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tv_ThoiGian"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="10dp"
-                android:text="00:00"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold"></TextView>
-
-            <TextView
-                android:id="@+id/tv_name_user"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingLeft="5dp"
-                android:text="Câu 1"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold"></TextView>
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tvArrowBack"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:drawableStart="@drawable/baseline_arrow_back_ios_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/tv_name_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.05"
+                    android:text="Bài kiểm tra"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.42"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.513" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    app:cardBackgroundColor="#4D000000"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_ThoiGian"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@android:drawable/ic_menu_recent_history"
+                        android:drawablePadding="8dp"
+                        android:drawableTint="#FFFFFF"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:text="00:00"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
-        <LinearLayout
-            android:id="@+id/lnChiTiet"
-            android:layout_below="@+id/toolbar"
-            android:orientation="horizontal"
+
+        <!-- Title and Instructions Panel -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewInstructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:background="@drawable/border_black_bot">
+            android:layout_below="@+id/toolbar"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#F5F9FF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
 
-            <TextView
-                android:id="@+id/tvCurrent"
-                android:layout_width="155dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"
-                android:paddingLeft="20dp"
-                android:text="Câu 1:"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="450dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lnChiTiet"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/border_black_top"
-            android:orientation="vertical"
-            tools:ignore="MissingConstraints">
-
-            <TextView
-                android:id="@+id/tvCauHoi"
+            <LinearLayout
+                android:id="@+id/lnChiTiet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Đề"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold|italic"></TextView>
-        </LinearLayout>
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <LinearLayout
-            android:id="@+id/linearLayout42"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Bài tập đọc hiểu"
+                    android:textColor="#333333"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Đọc đoạn văn và điền từ còn thiếu. Chọn một đáp án cho mỗi câu."
+                    android:textColor="#555555"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Reading Passage Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewPassage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cardViewInstructions"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/lavender"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvCurrent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:alpha="1"
+                    android:text="Câu hỏi số"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvCauHoi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:text="Đề"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Question Grid Section -->
+        <TextView
+            android:id="@+id/questionsLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@+id/linearLayout2"
-            android:layout_alignStart="@+id/linearLayout2"
-            android:layout_alignEnd="@+id/linearLayout2">
+            android:layout_below="@+id/cardViewPassage"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Câu hỏi"
+            android:textColor="#333333"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TableRow
+        <!-- Questions Container -->
+        <GridLayout
+            android:id="@+id/questionsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/questionsLabel"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:columnCount="2"
+            android:rowCount="2">
+
+            <!-- Question 1 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardQuestion1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <LinearLayout
-                        android:layout_span="1"
-                        android:layout_weight="1"
-                        android:id="@+id/linearLayout3"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/tvCau1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/border_black_bot"
-                        android:orientation="vertical"
-                        tools:ignore="MissingConstraints">
-                        <TextView
-                            android:id="@+id/tvCau1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="10dp"
-                            android:text="Câu 1:"
-                            android:textColor="@color/black"></TextView>
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Câu 1:"
+                        android:textColor="#333333"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                        <TextView
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <RadioButton
                             android:id="@+id/tvA1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án A"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvB1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="16dp"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án B"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvC1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án C"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvD1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="16dp"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
-                            android:text="Đáp án D1"
-                            android:textColor="@color/black"></TextView>
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
+                            android:text="Đáp án D"
+                            android:textColor="#333333" />
+                    </RadioGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
+            <!-- Question 2 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardQuestion2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
 
-                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout4"
-                        android:layout_span="1"
-                        android:layout_weight="1"
+                    <TextView
+                        android:id="@+id/tvCau2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/border_black_bot"
-                        android:orientation="vertical"
-                        tools:ignore="MissingConstraints">
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Câu 2:"
+                        android:textColor="#333333"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tvCau2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="10dp"
-                            android:text="Câu 2:"
-                            android:textColor="@color/black"></TextView>
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvA2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án A"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvB2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="16dp"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án B"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvC2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án C"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvD2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="16dp"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án D"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
+                    </RadioGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
+            <!-- Question 3 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardQuestion3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_marginEnd="8dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
 
-                    </LinearLayout>
-                </TableRow>
-                <TableRow
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-                    <LinearLayout
-                        android:layout_span="1"
-                        android:layout_weight="1"
-                        android:id="@+id/linearLayout5"
-                        android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tvCau"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/border_black_bot"
-                        android:orientation="vertical"
-                        tools:ignore="MissingConstraints">
-                        <TextView
-                            android:id="@+id/tvCau"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="10dp"
-                            android:text="Câu 3:"
-                            android:textColor="@color/black"></TextView>
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Câu 3:"
+                        android:textColor="#333333"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                        <TextView
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <RadioButton
                             android:id="@+id/tvA3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án A"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvB3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="16dp"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án B"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvC3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án C"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvD3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="16dp"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án D"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
+                    </RadioGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
+            <!-- Question 4 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardQuestion4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="8dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
 
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_span="1"
-                        android:layout_weight="1"
-                        android:id="@+id/linearLayout6"
-                        android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/tvCau4"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/border_black_bot"
-                        android:orientation="vertical"
-                        tools:ignore="MissingConstraints">
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Câu 4:"
+                        android:textColor="#333333"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tvCau4"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="10dp"
-                            android:text="Câu 4:"
-                            android:textColor="@color/black"></TextView>
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvA4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án A"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvB4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="16dp"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án B"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvC4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án C"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
 
-                        <TextView
+                        <RadioButton
                             android:id="@+id/tvD4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="16dp"
-                            android:background="@drawable/border_black"
-                            android:paddingLeft="20dp"
+                            android:buttonTint="#FF5722"
+                            android:paddingVertical="6dp"
                             android:text="Đáp án D"
-                            android:textColor="@color/black"></TextView>
+                            android:textColor="#333333" />
+                    </RadioGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </GridLayout>
 
-
-                    </LinearLayout>
-
-                </TableRow>
-            </TableLayout>
-
-
-
-
-        </LinearLayout>
-
-        <Button
+        <!-- Submit Button -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnXacNhan"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/linearLayout42"
-            android:layout_alignParentEnd="true"
+            android:layout_height="56dp"
+            android:layout_below="@+id/questionsContainer"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#FF5722"
+            android:text="Hoàn tất"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:cornerRadius="28dp"
+            app:elevation="4dp" />
 
-            android:text="Hoàn tất">
-
-        </Button>
     </RelativeLayout>
-
-
-
 </ScrollView>

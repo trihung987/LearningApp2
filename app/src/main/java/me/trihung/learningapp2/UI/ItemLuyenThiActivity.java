@@ -28,7 +28,7 @@ public class ItemLuyenThiActivity extends AppCompatActivity {
         }
         LuyenThi luyenThi = (LuyenThi) bundle.get("luyenThi_item");
         tvTitle.setText(luyenThi.getTitle());
-        tvSoCau.setText("Câu hỏi: " + luyenThi.getSoCauHoi());
-        tvThoiGian.setText("Thời gian: " + luyenThi.getThoiGian() + " phút");
+        tvSoCau.setText("" + luyenThi.getSoCauHoi()+" cậu");
+        tvThoiGian.setText("" + luyenThi.getThoiGian() + " phút");
     }
 }
