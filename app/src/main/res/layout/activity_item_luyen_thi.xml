@@ -25,7 +25,7 @@
         android:layout_marginTop="80dp"
         android:background="@drawable/circular_bg"
         android:padding="20dp"
-        android:src="@drawable/app_icon"
+        android:src="@drawable/quiz"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +42,7 @@
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="4"
-        android:text="Luyện thi"
+        android:text="Luyện thi trả lời câu"
         android:textColor="#625E5E"
         android:textSize="28sp"
         android:textStyle="bold"
