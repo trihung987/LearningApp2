@@ -98,9 +98,10 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        // số từ vựng đã lưu ở phần dưới cùng
         tvSoTuVungDaLuu = view.findViewById(R.id.tvSoTuVungLuu);
         tvSoTuVungDaLuu.setText(String.valueOf(getSoTuVungDaluu(MainActivity.getIdND())));
-        //TỪ VỰNG
+        //TỪ VỰNG ở phần trên
         recyclerViewTV  = view.findViewById(R.id.rcv_categoryTV);
         categoryAdapterTV = new BookAdapter(getListCategoryTV(), new InterfaceClickItemListener() {
             @Override
@@ -171,8 +172,8 @@ public class HomeFragment extends Fragment {
 
     private List<Book> getListCategoryDH() {
         List<Book> bookListDocHieu = new ArrayList<>();
-        bookListDocHieu.add(new Book( R.drawable.dien_khuyet," Hoàn thành \ncâu"));
-        bookListDocHieu.add(new Book( R.drawable.doc_hieu, "Hoàn thành \nđoạn văn"));
+        bookListDocHieu.add(new Book( R.drawable.dien_khuyet," Hoàn thành \ncâu","readpart1"));
+        bookListDocHieu.add(new Book( R.drawable.doc_hieu, "Hoàn thành \nđoạn văn","readpart2"));
         return bookListDocHieu;
     }
 
@@ -266,7 +267,7 @@ public class HomeFragment extends Fragment {
         Intent intent = new Intent(getContext(), ItemTrangChuDocHieuActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("docHieu_item", book);
-        bundle.putSerializable("id_item", book.getResoutceId());
+        bundle.putSerializable("book_type", book.getType());
         intent.putExtras(bundle);
         startActivity(intent);
     }

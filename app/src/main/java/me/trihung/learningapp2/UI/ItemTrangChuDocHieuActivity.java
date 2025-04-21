@@ -82,15 +82,18 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
 
 
         Book book  = (Book) bundle.get("docHieu_item");
+        String type = (String) bundle.get("book_type");
         Integer id = (Integer) bundle.get("id_item");
-        if (id == 2131165363) {
+        if ("readpart1".equals(type)) {
             soCauAdapter = new SoCauAdapter(this, R.layout.item_selected, getListSoCau());
+            //để set số câu trên spinner dùng adapter
             spinner.setAdapter(soCauAdapter);
 
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     soLuongCauHoi = soCauAdapter.getItem(position).getSoCau();
+                    Log.d("SpinnerSelection", "Số lượng câu hỏi được chọn: " + soLuongCauHoi);
                 }
 
                 @Override
@@ -102,6 +105,7 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
             tv_name_user.setText(book.getTitle());
             textView.setText(" A word or pharse is missing in each of the sentences below, Four answer choices are given below each sentence. Select the best answer to complete the sentence. Then mark the letter (A), (B), (C) or (D) on your answer sheet.\n" +
                     " Một từ hoặc một cụm từ bị thiếu trong mỗi câu nói duới dây. Bạn lựa chọn đáp án được đưa ra duới mỗi câu nói. Hãy chọn đáp án đúng nhất để hoàn thành câu. Sau đó đánh dấu đáp án A, B, C hoặc D vào phần làm bài của bạn" );
+            // khi người dùng nhấn nút bắt đầu.
             btnBatDau.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -109,7 +113,7 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
                     try {
                         // Tạo một đối tượng Calendar mới
                         Calendar calendar = Calendar.getInstance();
-                        // Cộng thêm 10 phút vào đối tượng Calendar
+                        // Cộng thêm 10 phút vào đối tượng Calendar , 1 câu là 1phut
                         calendar.add(Calendar.MINUTE, soLuongCauHoi * 1);
                         // Lấy thời gian mới của đối tượng Calendar
                         Date newTime = calendar.getTime();
@@ -121,7 +125,9 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
                         diffInMinutes = TimeUnit.MILLISECONDS.toMillis(diffInMillis);
 
                         try {
+                            // lấy lần thi mới nhất của người dùng đó +1 -> lần thi hiện tại
                             Cursor cursor2 = db.query_hasresult("SELECT * FROM LuyenNhanh ORDER BY idLN DESC LIMIT 1");
+                            Log.d("DEBUG", "Số lượng dòng trả về: " + cursor2.getCount());
                             maLN = "";
                             if (cursor2.getCount() != 0) {
                                 while (cursor2.moveToNext()) {
@@ -138,7 +144,9 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
                                 db.close();
                             }
                         }
+                        Log.d("DEBUG", "Giá trị của maLN: " + maLN);
                         int idLN = Integer.parseInt(maLN) + 1;
+                        //thông tin lần luyện này của ng dùng
                         String sqlLN = "INSERT INTO LuyenNhanh(idLN, soLuongCauHoiGioiHan, thoiGianBatDau, thoiGianKetThuc, idND) VALUES('" + idLN + "', '" + soLuongCauHoi + "', '" + formattedTime + "', '" + formattedTimeNew + "', "+MainActivity.getIdND()+")";
                         db.query_noresult(sqlLN);
 
@@ -146,7 +154,9 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
                         try {
                             listDe = new ArrayList<DocHieu>();
                             listDapAn = new ArrayList<DocHieuHTCau>();
+                            //lấy random các câu đọc hiểu
                             Cursor cursor = db.query_hasresult("SELECT * FROM DocHieu WHERE idDH <= 15 ORDER BY RANDOM() LIMIT " + soLuongCauHoi + "");
+                            Log.d("DEBUGcursor", "Số lượng câu hỏi lấy được: " + cursor.getCount());
                             if (cursor.getCount() != 0) {
                                 while (cursor.moveToNext()) {
                                     DocHieu docHieu;
@@ -154,25 +164,25 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
                                     String de = cursor.getString(1);
                                     docHieu = new DocHieu(id, de);
                                     listDe.add(docHieu);
-                                    listDapAn = layDapAn(listDe);
-
                                 }
+                                listDapAn = layDapAn(listDe);
                             } else {
                                 listDe = null;
                             }
 
                             for (int i = 0; i < listDe.size(); i++) {
+                                //bảng này dùng để liên kết lần luyện nhanh với phần đọc hiểu
                                 String sqlLNDH = "INSERT INTO LuyenNhanhDocHieu (idLN, idDH) VALUES ('" + idLN + "', '" + listDe.get(i).getIdDH() + "')";
                                 db.query_noresult(sqlLNDH);
                             }
 
                             //IN RA ĐỂ COI
                             for (int i = 0; i < listDe.size(); i++) {
-                                Log.d("TAG", "Đề " + (i + 1) + ": " + listDe.get(i));
+                                Log.d("TAG12", "Đề " + (i + 1) + ": " + listDe.get(i));
                             }
 
                             for (int i = 0; i < listDapAn.size(); i++) {
-                                Log.d("TAG", "ĐÁP ÁN " + (i + 1) + ": " + listDapAn.get(i));
+                                Log.d("TAG23", "ĐÁP ÁN " + (i + 1) + ": " + listDapAn.get(i));
                             }
 
                         } catch (Exception e) {
@@ -191,6 +201,7 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
                     }
 
                     // Tạo một Intent để chuyển từ Activity hiện tại sang Activity khác
+                    //này laf hoàn thành câu
                     Intent intent = new Intent(ItemTrangChuDocHieuActivity.this, DocHieuTestNhanhActivity.class);
 
                     // Tạo một ArrayList mới từ mảng listDe
@@ -210,7 +221,7 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-        }else if (id == 2131165366){
+        }else if ("readpart2".equals(type)){
 
             soCauAdapter = new SoCauAdapter(this, R.layout.item_selected, getListSoCauHTCau());
             spinner.setAdapter(soCauAdapter);
@@ -219,6 +230,7 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     soLuongCauHoi = soCauAdapter.getItem(position).getSoCau();
+                    Log.d("SpinnerSelection2", "Số lượng câu hỏi được chọn: " + soLuongCauHoi);
                 }
 
                 @Override
@@ -386,13 +398,13 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
                 String ds = "";
                 if (cursor.getCount() != 0){
                     while (cursor.moveToNext()){
-                        int idDH = cursor.getInt(0);
+                        int idDH = cursor.getInt(1);
                         if (idDH == listDe.get(i).getIdDH()){
-                            String dapAnA = cursor.getString(1);
-                            String dapAnB= cursor.getString(2);
-                            String dapAnC = cursor.getString(3);
-                            String dapAnD = cursor.getString(4);
-                            String dapAnDung = cursor.getString(5);
+                            String dapAnA = cursor.getString(2);
+                            String dapAnB= cursor.getString(3);
+                            String dapAnC = cursor.getString(4);
+                            String dapAnD = cursor.getString(5);
+                            String dapAnDung = cursor.getString(6);
                             docHieuHTCau = new DocHieuHTCau(new DocHieu(listDe.get(i).getIdDH(),listDe.get(i).getDe()),dapAnA,dapAnB,dapAnC,dapAnD,dapAnDung);
                             listDapAn.add(docHieuHTCau);
                         }else {
@@ -428,6 +440,15 @@ public class ItemTrangChuDocHieuActivity extends AppCompatActivity {
     private List<SoCau> getListSoCauHTCau() {
         List<SoCau> list = new ArrayList<>();
         list.add(new SoCau(1));
+        list.add(new SoCau(2));
+        list.add(new SoCau(3));
+        list.add(new SoCau(4));
+        list.add(new SoCau(5));
+        list.add(new SoCau(6));
+        list.add(new SoCau(7));
+        list.add(new SoCau(8));
+        list.add(new SoCau(9));
+        list.add(new SoCau(10));
 
         return list;
     }

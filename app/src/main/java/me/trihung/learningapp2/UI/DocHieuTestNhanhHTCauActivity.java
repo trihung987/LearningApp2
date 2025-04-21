@@ -28,6 +28,7 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
     private long myDataTG;
 
     private int count = 0;
+    private int answeredQuestionsCount = 0;
     private int questionListSize;
     private int questionCounter;
     private CountDownTimer countDownTimer;
@@ -37,6 +38,8 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
     private int currentQuestion = 0;
     private ArrayList<DocHieuHTDoanVan> arrayListDe;
     private DocHieuHTDoanVan mDocHieuHTDoanVan;
+
+    private TextView[] selectedAnswers = new TextView[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,30 +106,48 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        int questionIndex = -1;
+        String answerLetter = null;
         TextView selectedTextView = null;
-        int questionIndex = currentQuestion;  // Default index
+        int groupIndex = 0; // To track which group of answers (0-3) this belongs to
 
         if (id == R.id.tvA1 || id == R.id.tvB1 || id == R.id.tvC1 || id == R.id.tvD1) {
-            selectedTextView = findViewById(id);
+            questionIndex = currentQuestion;
+            groupIndex = 0;
         } else if (id == R.id.tvA2 || id == R.id.tvB2 || id == R.id.tvC2 || id == R.id.tvD2) {
             questionIndex = currentQuestion + 1;
-            selectedTextView = findViewById(id);
+            groupIndex = 1;
         } else if (id == R.id.tvA3 || id == R.id.tvB3 || id == R.id.tvC3 || id == R.id.tvD3) {
             questionIndex = currentQuestion + 2;
-            selectedTextView = findViewById(id);
+            groupIndex = 2;
         } else if (id == R.id.tvA4 || id == R.id.tvB4 || id == R.id.tvC4 || id == R.id.tvD4) {
             questionIndex = currentQuestion + 3;
+            groupIndex = 3;
+        }
+
+        if (questionIndex != -1 && questionIndex < arrayListDe.size()) {
             selectedTextView = findViewById(id);
-        }
-        if (selectedTextView != null) {
-            selectedTextView.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(selectedTextView, arrayListDe.get(questionIndex), arrayListDe.get(questionIndex).getDapAnDung());
-        }
+            answerLetter = getAnswerLetterFromId(id); // Lấy A/B/C/D từ id
 
+            if (selectedTextView != null && answerLetter != null) {
+                // If there was a previously selected answer for this question, reset its background
+                if (selectedAnswers[groupIndex] != null) {
+                    selectedAnswers[groupIndex].setBackgroundResource(R.drawable.border_black);
+                }
 
+                // Set this as the new selected answer for this question
+                selectedAnswers[groupIndex] = selectedTextView;
+                selectedTextView.setBackgroundResource(R.drawable.bg_select);
+                checkAnswer(answerLetter, selectedTextView, arrayListDe.get(questionIndex), arrayListDe.get(questionIndex).getDapAnDung());
+            }
+        }
     }
 
     private void setDataQuestion(DocHieuHTDoanVan docHieuHTDoanVan) {
+        // Reset selection tracking
+        for (int i = 0; i < selectedAnswers.length; i++) {
+            selectedAnswers[i] = null;
+        }
         if (docHieuHTDoanVan == null) {
             return;
         }
@@ -189,7 +210,7 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
         tvD2.setOnClickListener(this);
 
         tvA3.setOnClickListener(this);
-        tvB4.setOnClickListener(this);
+        tvB3.setOnClickListener(this);
         tvC3.setOnClickListener(this);
         tvD3.setOnClickListener(this);
 
@@ -294,25 +315,49 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
     }
 
 
-    public void checkAnswer(TextView textView, DocHieuHTDoanVan docHieuHTDoanVan, String danAn) {
+    public void checkAnswer(String dapAnChon, TextView textView, DocHieuHTDoanVan cauHoi, String dapAnDung) {
+        Log.d("TAG", "checkAnswer: " + dapAnChon);
+        Log.d("TAG", "checkAnswer: " + dapAnDung);
+        Log.d("TAG", "checkAnswer: " + cauHoi);
 
-        Log.d("TAG", "checkAnswer: " + textView.getText());
-        Log.d("TAG", "checkAnswer: " + danAn);
-        Log.d("TAG", "checkAnswer: " + docHieuHTDoanVan);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (textView.getText().equals(danAn)) {
+                if (dapAnChon.equalsIgnoreCase(dapAnDung)) {
                     textView.setBackgroundResource(R.drawable.bg_answer);
-                    showCorrect(docHieuHTDoanVan);
-//                    nextQuestion();
+                    showCorrect(cauHoi);
+
+                    // Wait for 3 seconds after showCorrect completes
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Code to execute after the 3-second delay
+                            answeredQuestionsCount++; // If you're tracking answered questions
+
+                            // Check if all questions on this page are answered
+                            if (answeredQuestionsCount >= 4) {
+                                // Reset counter for next page
+                                answeredQuestionsCount = 0;
+                                // Move to next set of questions
+                                nextQuestion();
+                            }
+                        }
+                    }, 3000); // 3 seconds delay
+
                 } else {
                     textView.setBackgroundResource(R.drawable.bg_sai);
-                    showCorrect(docHieuHTDoanVan);
-                    gameOver();
+                    showCorrect(cauHoi);
+
+                    // Wait for 3 seconds before showing game over dialog
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            gameOver();
+                        }
+                    }, 3000); // 3 seconds delay
                 }
             }
-        }, 1000);
+        }, 1000); // Original 1 second delay
     }
 
     private void gameOver() {
@@ -375,97 +420,32 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
             questionIndex = currentQuestion + 3;
         }
 
-        // Check if index is within bounds
         if (questionIndex < arrayListDe.size()) {
             selectedTextView = findViewById(id);
             if (selectedTextView != null) {
                 selectedTextView.setBackgroundResource(R.drawable.bg_select);
-                checkAnswer(selectedTextView, mDocHieuHTDoanVan, arrayListDe.get(questionIndex).getDapAnDung());
+
+                String dapAnChon = getAnswerLetterFromId(id);  //  Lấy A/B/C/D từ ID
+                String dapAnDung = arrayListDe.get(questionIndex).getDapAnDung();
+                DocHieuHTDoanVan cauHoi = arrayListDe.get(questionIndex);
+
+                if (dapAnChon != null) {
+                    checkAnswer(dapAnChon, selectedTextView, cauHoi, dapAnDung);
+                }
             }
         }
     }
 
-
-//        switch (tvCauHoi.getId()){
-//            case R.id.tvA1:
-//                tvA1.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvA1, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion).getDapAnDung());
-//                break;
-//            case R.id.tvB1:
-//                tvB1.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvB1, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion).getDapAnDung());
-//                break;
-//            case R.id.tvC1:
-//                tvC1.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvC1, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion).getDapAnDung());
-//                break;
-//            case R.id.tvD1:
-//                tvD1.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvD1, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion).getDapAnDung());
-//                break;
-//
-//            case R.id.tvA2:
-//                tvA2.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvA2, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+1).getDapAnDung());
-//                break;
-//            case R.id.tvB2:
-//                tvB2.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvB2, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+1).getDapAnDung());
-//                break;
-//            case R.id.tvC2:
-//                tvC2.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvC2, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+1).getDapAnDung());
-//                break;
-//            case R.id.tvD2:
-//                tvD2.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvD2, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+1).getDapAnDung());
-//                break;
-//
-//
-//            case R.id.tvA3:
-//                tvA3.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvA3, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+2).getDapAnDung());
-//                break;
-//            case R.id.tvB3:
-//                tvB3.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvB3, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+2).getDapAnDung());
-//                break;
-//            case R.id.tvC3:
-//                tvC3.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvC3, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+2).getDapAnDung());
-//                break;
-//            case R.id.tvD3:
-//                tvD3.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvD3, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+2).getDapAnDung());
-//                break;
-//
-//            case R.id.tvA4:
-//                tvA4.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvA4, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+3).getDapAnDung());
-//                break;
-//            case R.id.tvB4:
-//                tvB4.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvB4, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+3).getDapAnDung());
-//                break;
-//            case R.id.tvC4:
-//                tvC4.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvC4, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+3).getDapAnDung());
-//                break;
-//            case R.id.tvD4:
-//                tvD4.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvD4, mDocHieuHTDoanVan,arrayListDe.get(currentQuestion+3).getDapAnDung());
-//                break;
-
     private void nextQuestion() {
-        if (currentQuestion == arrayListDe.size() - 1) {
+        if (currentQuestion + 4 >= arrayListDe.size()) {
             showDiaLog("Hoàn thành tất cả các câu");
             Intent intent = new Intent(DocHieuTestNhanhHTCauActivity.this, ResultDocHieuActivity.class);
             startActivity(intent);
         } else {
-            currentQuestion++;
+            currentQuestion += 4; // Move forward by 4 questions
+            answeredQuestionsCount = 0; // Reset the counter
             setDataQuestion(arrayListDe.get(currentQuestion));
         }
-
     }
 
     private void showDiaLog(String message) {
@@ -483,5 +463,17 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-
+    private String getAnswerLetterFromId(int id) {
+        if (id == R.id.tvA || id == R.id.tvA1 || id == R.id.tvA2 || id == R.id.tvA3 || id == R.id.tvA4) {
+            return "A";
+        } else if (id == R.id.tvB || id == R.id.tvB1 || id == R.id.tvB2 || id == R.id.tvB3 || id == R.id.tvB4) {
+            return "B";
+        } else if (id == R.id.tvC || id == R.id.tvC1 || id == R.id.tvC2 || id == R.id.tvC3 || id == R.id.tvC4) {
+            return "C";
+        } else if (id == R.id.tvD || id == R.id.tvD1 || id == R.id.tvD2 || id == R.id.tvD3 || id == R.id.tvD4) {
+            return "D";
+        } else {
+            return null;
+        }
+    }
 }
