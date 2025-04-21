@@ -177,39 +177,20 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
         int id = v.getId();
         if (id == R.id.tvA) {
             tvA.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(tvA, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer("A",tvA, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
         } else if (id == R.id.tvB) {
             tvB.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(tvB, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer("B",tvB, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
         } else if (id == R.id.tvC) {
             tvC.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(tvC, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer("C",tvC, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
         } else if (id == R.id.tvD) {
             tvD.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(tvD, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer("D",tvD, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
         }
-
-//        switch (v.getId()){
-//            case R.id.tvA:
-//                tvA.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvA, mDocHieuHTCau,arrayListDe.get(currentQuestion).getDapAnDung());
-//                break;
-//            case R.id.tvB:
-//                tvB.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvB, mDocHieuHTCau,arrayListDe.get(currentQuestion).getDapAnDung());
-//                break;
-//            case R.id.tvC:
-//                tvC.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvC, mDocHieuHTCau,arrayListDe.get(currentQuestion).getDapAnDung());
-//                break;
-//            case R.id.tvD:
-//                tvD.setBackgroundResource(R.drawable.bg_select);
-//                checkAnswer(tvD, mDocHieuHTCau,arrayListDe.get(currentQuestion).getDapAnDung());
-//                break;
-//        }
     }
 
-    public void checkAnswer(TextView textView,DocHieuHTCau docHieuHTCau, String danAn ){
+    public void checkAnswer(String dapandung,TextView textView,DocHieuHTCau docHieuHTCau, String danAn ){
 
         Log.d("TAG", "checkAnswer: "+textView.getText());
         Log.d("TAG", "checkAnswer: "+danAn);
@@ -217,7 +198,7 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (textView.getText().equals(danAn)){
+                if (dapandung.equals(danAn)){
                     textView.setBackgroundResource(R.drawable.bg_answer);
                     showCorrect(mDocHieuHTCau);
                     nextQuestion();
@@ -240,16 +221,19 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
     }
 
     private void showCorrect(DocHieuHTCau mDocHieuHTCau) {
-        if ( mDocHieuHTCau.getDapAnA().equals(arrayListDe.get(0).getDapAnDung()) ){
+        String dapAnDung = arrayListDe.get(currentQuestion).getDapAnDung();
+
+        if (mDocHieuHTCau.getDapAnA().equals(dapAnDung)) {
             tvA.setBackgroundResource(R.drawable.bg_answer);
-        }else if( mDocHieuHTCau.getDapAnB().equals(arrayListDe.get(0).getDapAnDung())){
+        } else if (mDocHieuHTCau.getDapAnB().equals(dapAnDung)) {
             tvB.setBackgroundResource(R.drawable.bg_answer);
-        }else if( mDocHieuHTCau.getDapAnC().equals(arrayListDe.get(0).getDapAnDung())){
+        } else if (mDocHieuHTCau.getDapAnC().equals(dapAnDung)) {
             tvC.setBackgroundResource(R.drawable.bg_answer);
-        }else if( mDocHieuHTCau.getDapAnD().equals( arrayListDe.get(0).getDapAnDung())){
+        } else if (mDocHieuHTCau.getDapAnD().equals(dapAnDung)) {
             tvD.setBackgroundResource(R.drawable.bg_answer);
         }
     }
+
 
     private void nextQuestion() {
         if (currentQuestion == arrayListDe.size() -1){

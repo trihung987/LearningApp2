@@ -6,9 +6,24 @@ public class Book implements Serializable {
     private int resoutceId;
     private String title;
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    private String type;
+
     public Book(int resoutceId, String title) {
         this.resoutceId = resoutceId;
         this.title = title;
+    }
+    public Book(int resoutceId, String title, String type) {
+        this.resoutceId = resoutceId;
+        this.title = title;
+        this.type = type;
     }
 
     public int getResoutceId() {
