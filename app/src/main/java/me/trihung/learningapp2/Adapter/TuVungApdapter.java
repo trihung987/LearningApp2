@@ -2,11 +2,13 @@ package me.trihung.learningapp2.Adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import me.trihung.learningapp2.Entity.TuVung;
 import me.trihung.learningapp2.MainActivity;
 import me.trihung.learningapp2.My_Interface.InterfaceClickItemTuVungListener;
 import me.trihung.learningapp2.R;
+import me.trihung.learningapp2.UI.Utils.TextToSpeechUtils;
 
 import java.util.List;
 
@@ -25,12 +28,14 @@ public class TuVungApdapter extends RecyclerView.Adapter<TuVungApdapter.TuVungAp
     private List<TuVung> tuVungs;
     private Database db;
 
+    private TextToSpeechUtils textToSpeechUtils;
     private InterfaceClickItemTuVungListener interfaceClickItemTuVungListener;
 
     public TuVungApdapter(Context context,List<TuVung> tuVungs, InterfaceClickItemTuVungListener interfaceClickItemTuVungListener) {
         this.tuVungs = tuVungs;
         this.interfaceClickItemTuVungListener = interfaceClickItemTuVungListener;
         db = new Database(context);
+        textToSpeechUtils = new TextToSpeechUtils(context);
     }
 
     @NonNull
@@ -46,11 +51,17 @@ public class TuVungApdapter extends RecyclerView.Adapter<TuVungApdapter.TuVungAp
         if (tuVung == null){
             return;
         }
-        holder.tvTiengAnh.setText(tuVung.getTiengAnh());
+        holder.tvTiengAnh.setText(tuVung.getTiengAnh()+" "+tuVung.getGroup());
         holder.tvTiengViet.setText(tuVung.getTiengViet());
-        holder.chkLuuTuVung.setChecked(checkTuVungTrongSoTay(tuVung.getTiengAnh(),MainActivity.getIdND()));
+        holder.chkLuuTuVung.setChecked(db.checkTuVungTrongSoTay(tuVung.getTiengAnh(),MainActivity.getIdND()));
+        holder.tvPhienAm.setText(tuVung.getPhienAm());
 
-
+        holder.sound.setOnClickListener(v->{
+            holder.sound.animate().scaleX(0.8f).scaleY(0.8f).setDuration(100).withEndAction(() ->
+                    holder.sound.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
+            ).start();
+            textToSpeechUtils.speak(tuVung.getTiengAnh());
+        });
 
         holder.layout_item_TV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,9 +74,9 @@ public class TuVungApdapter extends RecyclerView.Adapter<TuVungApdapter.TuVungAp
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    luuTuVungVaoSoTay(holder.chkLuuTuVung.getContext(), MainActivity.getIdND(),getIdTheoTiengAnh(tuVung.getTiengAnh()));
+                    db.luuTuVungVaoSoTay(holder.chkLuuTuVung.getContext(), MainActivity.getIdND(), db.getIdTheoTiengAnh(tuVung.getTiengAnh()));
                 } else{
-                    xoaTuVungKhoiSoTay(holder.chkLuuTuVung.getContext(), MainActivity.getIdND(),getIdTheoTiengAnh(tuVung.getTiengAnh()));
+                    db.xoaTuVungKhoiSoTay(holder.chkLuuTuVung.getContext(), MainActivity.getIdND(), db.getIdTheoTiengAnh(tuVung.getTiengAnh()));
                 }
             }
         });
@@ -79,57 +90,15 @@ public class TuVungApdapter extends RecyclerView.Adapter<TuVungApdapter.TuVungAp
         return 0;
     }
 
-    private void luuTuVungVaoSoTay(Context context, int idND, int idTV) {
-        try {
-            db.query_noresult("insert into ChiTietTuVung(idND,idTuVung) values ("+idND+", "+idTV+")");
-            Toast.makeText(context, "Đã lưu vào sổ tay", Toast.LENGTH_SHORT).show();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private void xoaTuVungKhoiSoTay(Context context, int idND, int idTV) {
-        try {
-            db.query_noresult("delete from ChiTietTuVung where idND = "+idND+" and idTuVung = "+idTV+"");
-            Toast.makeText(context, "Đã xóa khỏi sổ tay", Toast.LENGTH_SHORT).show();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private boolean checkTuVungTrongSoTay(String tiengAnh, int idND) {
-        try {
-            Cursor c = db.query_hasresult("SELECT tiengAnh FROM ChiTietTuVung c join TuVung t on c.idTuVung = t.idTuVung  WHERE idND = "+idND+"");
-            while(c.moveToNext()){
-                String a = c.getString(0);
-                if (a.equalsIgnoreCase(tiengAnh))
-                    return true;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private int getIdTheoTiengAnh(String tiengAnh){
-        int id=0;
-        try {
-            Cursor c = db.query_hasresult("SELECT idTuVung FROM TuVung WHERE tiengAnh = '"+tiengAnh+"'");
-            while(c.moveToNext()){
-                id = c.getInt(0);
-            }
-            return id;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
     public class TuVungApdapterHolder extends RecyclerView.ViewHolder{
         private androidx.cardview.widget.CardView layout_item_TV;
         private TextView tvTiengAnh;
         private TextView tvTiengViet;
+        private TextView tvPhienAm;
         private CheckBox chkLuuTuVung;
+
+        private ImageButton sound;
 
 
         public TuVungApdapterHolder(@NonNull View itemView) {
@@ -138,6 +107,8 @@ public class TuVungApdapter extends RecyclerView.Adapter<TuVungApdapter.TuVungAp
             tvTiengViet = itemView.findViewById(R.id.textViet);
             layout_item_TV = itemView.findViewById(R.id.layout_item_TV);
             chkLuuTuVung = itemView.findViewById(R.id.chkLuuTuVung);
+            tvPhienAm = itemView.findViewById(R.id.textTranscription);
+            sound = itemView.findViewById(R.id.sound_button);
 
         }
     }

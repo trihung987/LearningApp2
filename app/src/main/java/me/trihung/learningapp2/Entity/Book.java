@@ -19,6 +19,7 @@ public class Book implements Serializable {
     public Book(int resoutceId, String title) {
         this.resoutceId = resoutceId;
         this.title = title;
+        this.type = "";
     }
     public Book(int resoutceId, String title, String type) {
         this.resoutceId = resoutceId;

@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +26,8 @@ import java.util.List;
 public class ItemOnTapTuVungActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TuVungApdapter tuVungApdapter;
-    TextView tv_name_user,tvArrowBack;
+    TextView tv_name_user;
+    ImageButton tvArrowBack;
     EditText edtTimTuVung;
     Bundle bundle;
     Database db;
@@ -34,7 +36,7 @@ public class ItemOnTapTuVungActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_ontaptuvung);
         tv_name_user = findViewById(R.id.tv_name_user);
-        tvArrowBack = findViewById(R.id.tvArrowBack);;
+        tvArrowBack = findViewById(R.id.btnBack);;
         edtTimTuVung = findViewById(R.id.edtTimTuVung);
         db = new Database(ItemOnTapTuVungActivity.this);
 
@@ -102,11 +104,13 @@ public class ItemOnTapTuVungActivity extends AppCompatActivity {
     private List<TuVung> getListTuVung(int idND) {
         List<TuVung> list = new ArrayList<>();
         try {
-            Cursor c = db.query_hasresult("SELECT tiengAnh, tiengViet FROM ChiTietTuVung c join TuVung t on c.idTuVung = t.idTuVung WHERE idND = "+idND+"");
+            Cursor c = db.query_hasresult("SELECT tiengAnh, phienAm, tiengViet, grouptv FROM ChiTietTuVung c join TuVung t on c.idTuVung = t.idTuVung WHERE idND = "+idND+"");
             while(c.moveToNext()){
                 String tiengAnh = c.getString(0);
-                String tiengViet = c.getString(1);
-                list.add(new TuVung(tiengAnh,tiengViet));
+                String phienAm = c.getString(1);
+                String tiengViet = c.getString(2);
+                String group = c.getString(3);
+                list.add(new TuVung(tiengAnh,tiengViet, phienAm, group));
             }
             return list;
         }catch (Exception e){
@@ -122,11 +126,13 @@ public class ItemOnTapTuVungActivity extends AppCompatActivity {
     private List<TuVung> getListTuVungBySearch(int idND,String keyWord) {
         List<TuVung> list = new ArrayList<>();
         try {
-            Cursor c = db.query_hasresult("SELECT tiengAnh, tiengViet FROM ChiTietTuVung c join TuVung t on c.idTuVung = t.idTuVung WHERE idND = "+idND+" and tiengAnh like '%"+keyWord+"%'");
+            Cursor c = db.query_hasresult("SELECT tiengAnh, phienAm, tiengViet, grouptv FROM ChiTietTuVung c join TuVung t on c.idTuVung = t.idTuVung WHERE idND = "+idND+" and tiengAnh like '%"+keyWord+"%'");
             while(c.moveToNext()){
                 String tiengAnh = c.getString(0);
-                String tiengViet = c.getString(1);
-                list.add(new TuVung(tiengAnh,tiengViet));
+                String phienAm = c.getString(1);
+                String tiengViet = c.getString(2);
+                String group = c.getString(3);
+                list.add(new TuVung(tiengAnh,tiengViet, phienAm, group));
             }
             return list;
         }catch (Exception e){

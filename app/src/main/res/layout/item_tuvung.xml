@@ -1,87 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_item_TV"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="8dp"
-    android:id="@+id/layout_item_TV"
-    android:layout_margin="10dp"
+    android:layout_marginBottom="12dp"
+    android:layout_marginStart="3dp"
+    android:layout_marginEnd="3dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
     android:foreground="?attr/selectableItemBackground">
-    <RelativeLayout
-        android:padding="10dp"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+
+        android:padding="16dp">
+
         <ImageView
             android:id="@+id/img_TuVung"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/itemtuvung">
-        </ImageView>
-        <TextView
-            android:id="@+id/textTitleTiengAnh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tiếng Anh:"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_toEndOf="@+id/img_TuVung"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp">
-        </TextView>
-        <TextView
-            android:id="@+id/textTiengAnh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Book"
-            android:textSize="16sp"
-            android:textColor="@color/black"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/image_circle_background"
+            android:padding="8dp"
+            android:src="@drawable/vocabitem"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            android:layout_toRightOf="@+id/textTitleTiengAnh"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp">
-        </TextView>
+        <LinearLayout
+            android:id="@+id/content_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/chkLuuTuVung"
+            app:layout_constraintStart_toEndOf="@+id/img_TuVung"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textTitleTiengViet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tiếng Việt:"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_toEndOf="@+id/img_TuVung"
-            android:layout_below="@+id/textTitleTiengAnh"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-        >
-        </TextView>
-        <TextView
-            android:id="@+id/textViet"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sách"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_below="@+id/textTitleTiengAnh"
-            android:layout_toRightOf="@+id/textTitleTiengViet"
-            android:layout_marginTop="5dp">
-        </TextView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+
+                <TextView
+                    android:id="@+id/textTiengAnh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="Book"
+                    android:textColor="@color/lavender"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/btnPlayAudio"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_volume"
+                    android:contentDescription="Play pronunciation" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:id="@+id/textTitleTranscription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phiên âm:"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textTranscription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="/bʊk/"
+                    android:textColor="#4CAF50"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="8dp"
+                android:background="#E0E0E0" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textTitleTiengViet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dịch nghĩa:"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Sách"
+                    android:textColor="#757575"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+        <ImageButton
+            android:id="@+id/sound_button"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/circle_button_background_accent"
+            android:elevation="8dp"
+            android:src="@drawable/ic_volume_up"
+            app:tint="#000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <CheckBox
             android:id="@+id/chkLuuTuVung"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="10dp"></CheckBox>
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/custom_checkbox"
+            android:button="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/sound_button"
+            app:layout_constraintRight_toRightOf="@id/sound_button" />
 
-
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -34,8 +34,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
 
-    private RecyclerView recyclerViewTV;
-    private BookAdapter categoryAdapterTV;
+
 
     private RecyclerView recyclerViewDH;
     private BookAdapter categoryAdapterDH;
@@ -100,24 +99,16 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         // số từ vựng đã lưu ở phần dưới cùng
         tvSoTuVungDaLuu = view.findViewById(R.id.tvSoTuVungLuu);
-        tvSoTuVungDaLuu.setText(String.valueOf(getSoTuVungDaluu(MainActivity.getIdND())));
         //TỪ VỰNG ở phần trên
-        recyclerViewTV  = view.findViewById(R.id.rcv_categoryTV);
-        categoryAdapterTV = new BookAdapter(getListCategoryTV(), new InterfaceClickItemListener() {
-            @Override
-            public void onClickItem(Book book) {
-                onClickGoToDetail(book);
-            }
-
-            @Override
-            public void onClickItem(Object object) {
-
-            }
+        view.findViewById(R.id.cardTheoChuDe).setOnClickListener((v)->{
+            Intent intent = new Intent(getContext(), TuVungChuDeActivity.class);
+            startActivity(intent);
         });
-        LinearLayoutManager linearLayoutManagerTV = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
-        recyclerViewTV.setLayoutManager(linearLayoutManagerTV);
-        categoryAdapterTV.setData(getListCategoryTV());
-        recyclerViewTV.setAdapter(categoryAdapterTV);
+        view.findViewById(R.id.cardTheoFlashcard).setOnClickListener((v)->{
+            Intent intent = new Intent(getContext(), FlashCardActivity.class);
+            startActivity(intent);
+        });
+
 
         //NGHE HIỂU
         recyclerViewNH  = view.findViewById(R.id.rcv_categoryNH);
@@ -168,6 +159,14 @@ public class HomeFragment extends Fragment {
             }
         });
         return view;
+
+
+    }
+
+    @Override
+    public void onStart() {
+        tvSoTuVungDaLuu.setText(String.valueOf(getSoTuVungDaluu(MainActivity.getIdND())));
+        super.onStart();
     }
 
     private List<Book> getListCategoryDH() {
@@ -185,26 +184,7 @@ public class HomeFragment extends Fragment {
         return bookListNgheHieu;
     }
 
-    private List<Book> getListCategoryTV() {
-        List<Book> bookListTuVung = new ArrayList<>();
-        try {
-            Cursor c = db.query_hasresult("Select * from ChuDe");
-            while(c.moveToNext()){
-                String ten = c.getString(1);
-                String hinhAnh = c.getString(2);
-                int resourceId = this.getContext().getResources().getIdentifier(hinhAnh, "drawable", this.getContext().getPackageName());
-                bookListTuVung.add(new Book(resourceId, ten));
-            }
-            return bookListTuVung;
-        }catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            if (db != null) {
-                db.close();
-            }
-        }
-        return null;
-    }
+
 
     private int getSoTuVungDaluu(int idND){
         int sl=0;
@@ -227,7 +207,7 @@ public class HomeFragment extends Fragment {
     private int getIdTheoUserName(String userName){
         int id=0;
         try {
-            Cursor c = db.query_hasresult("SELECT idND FROM NguoiDung n JOIN TaiKhoan t on n.idTaiKhoan = t.userName WHERE userName = "+userName+"");
+            Cursor c = db.query_hasresult("SELECT n.idND FROM NguoiDung n JOIN TaiKhoan t on n.idTaiKhoan = t.userName WHERE userName = "+userName+"");
             while(c.moveToNext()){
                 id = c.getInt(0);
             }
@@ -247,13 +227,7 @@ public class HomeFragment extends Fragment {
         super.onDestroy();
     }
 
-    private void onClickGoToDetail(Book book){
-        Intent intent = new Intent(getContext(), ItemTuVungActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("tuVung_item", book);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
+
     private void onClickGoToDetailNH(Book book){
         Intent intent = new Intent(getContext(), ItemTrangChuNgheHieuActivity.class);
         Bundle bundle = new Bundle();

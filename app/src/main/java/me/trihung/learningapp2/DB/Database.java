@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,6 +54,52 @@ public class Database extends SQLiteOpenHelper {
     public Cursor query_hasresult(String sql){
         SQLiteDatabase db = getWritableDatabase();
         return db.rawQuery(sql, null);
+    }
+
+    public void luuTuVungVaoSoTay(Context context, int idND, int idTV) {
+        try {
+            query_noresult("insert into ChiTietTuVung(idND,idTuVung) values ("+idND+", "+idTV+")");
+            Toast.makeText(context, "Đã lưu vào sổ tay", Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void xoaTuVungKhoiSoTay(Context context, int idND, int idTV) {
+        try {
+            query_noresult("delete from ChiTietTuVung where idND = "+idND+" and idTuVung = "+idTV+"");
+            Toast.makeText(context, "Đã xóa khỏi sổ tay", Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public boolean checkTuVungTrongSoTay(String tiengAnh, int idND) {
+        try {
+            Cursor c = query_hasresult("SELECT tiengAnh FROM ChiTietTuVung c join TuVung t on c.idTuVung = t.idTuVung  WHERE idND = "+idND+"");
+            while(c.moveToNext()){
+                String a = c.getString(0);
+                if (a.equalsIgnoreCase(tiengAnh))
+                    return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public int getIdTheoTiengAnh(String tiengAnh){
+        int id=0;
+        try {
+            Cursor c = query_hasresult("SELECT idTuVung FROM TuVung WHERE tiengAnh = '"+tiengAnh+"'");
+            while(c.moveToNext()){
+                id = c.getInt(0);
+            }
+            return id;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override

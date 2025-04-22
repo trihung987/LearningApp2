@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     public static int getIdND() {
         int id=0;
         try {
-            Cursor c = db.query_hasresult("SELECT idND FROM NguoiDung n JOIN TaiKhoan t on n.idTaiKhoan = t.userName WHERE userName = '"+mTk+"'");
+            Cursor c = db.query_hasresult("SELECT n.idND FROM NguoiDung n JOIN TaiKhoan t on n.idTaiKhoan = t.userName WHERE userName = '"+mTk+"'");
             while(c.moveToNext()){
                 id = c.getInt(0);
             }

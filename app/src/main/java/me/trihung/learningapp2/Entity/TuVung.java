@@ -5,10 +5,31 @@ import java.io.Serializable;
 public class TuVung implements Serializable {
     private String tiengAnh;
     private String tiengViet;
+    private String phienAm;
+    private String group;
 
-    public TuVung(String tiengAnh, String tiengViet) {
+    public TuVung(String tiengAnh, String tiengViet, String phienAm, String group) {
         this.tiengAnh = tiengAnh;
         this.tiengViet = tiengViet;
+        this.phienAm = phienAm;
+        this.group = group;
+
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getPhienAm() {
+        return phienAm;
+    }
+
+    public void setPhienAm(String phienAm) {
+        this.phienAm = phienAm;
     }
 
     public String getTiengAnh() {

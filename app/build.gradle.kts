@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.cardview)
+    implementation(libs.lottie)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
     testImplementation(libs.junit)

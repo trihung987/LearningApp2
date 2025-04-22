@@ -1,37 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginEnd="10dp"
     android:id="@+id/layout_item"
-    app:cardElevation="0dp"
-    android:foreground="?attr/selectableItemBackground">
+    android:layout_width="140dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
+
         <ImageView
             android:id="@+id/imgBook"
-            android:padding="20dp"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:src="@drawable/picture"
-            android:background="@drawable/border_black">
-
-        </ImageView>
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_image_background"
+            android:contentDescription="Book cover image"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/picture" />
 
         <TextView
             android:id="@+id/tv_title"
-            android:padding="6dp"
-            android:textSize="14sp"
-            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:padding="4dp"
             android:text="Book 1"
-            android:textStyle="bold"
-            android:gravity="center">
+            android:textColor="#212121"
+            android:maxLines="3"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
-        </TextView>
+
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

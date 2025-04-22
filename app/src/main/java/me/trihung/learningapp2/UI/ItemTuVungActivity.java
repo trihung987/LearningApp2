@@ -104,11 +104,13 @@ public class ItemTuVungActivity extends AppCompatActivity {
     private List<TuVung> getListTuVung(Book book) {
         List<TuVung> list = new ArrayList<>();
         try {
-            Cursor c = db.query_hasresult("SELECT tiengAnh,tiengViet FROM TuVung t join ChuDe c on t.idChuDe = c.idChuDe WHERE tenChuDe = '"+book.getTitle()+"'");
+            Cursor c = db.query_hasresult("SELECT tiengAnh, phienAm, tiengViet, grouptv  FROM TuVung t join ChuDe c on t.idChuDe = c.idChuDe WHERE tenChuDe = '"+book.getTitle()+"'");
             while(c.moveToNext()){
                 String tiengAnh = c.getString(0);
-                String tiengViet = c.getString(1);
-                list.add(new TuVung(tiengAnh,tiengViet));
+                String phienAm = c.getString(1);
+                String tiengViet = c.getString(2);
+                String group = c.getString(3);
+                list.add(new TuVung(tiengAnh,tiengViet, phienAm, group));
             }
             return list;
         }catch (Exception e){
@@ -120,16 +122,23 @@ public class ItemTuVungActivity extends AppCompatActivity {
     private List<TuVung> getListTuVungBySearch(Book book,String keyWord) {
         List<TuVung> list = new ArrayList<>();
         try {
-            Cursor c = db.query_hasresult("SELECT tiengAnh,tiengViet FROM TuVung t join ChuDe c on t.idChuDe = c.idChuDe WHERE tenChuDe = '"+book.getTitle()+"' and tiengAnh like '%"+keyWord+"%'");
+            Cursor c = db.query_hasresult("SELECT tiengAnh,phienAm, tiengViet, grouptv FROM TuVung t join ChuDe c on t.idChuDe = c.idChuDe WHERE tenChuDe = '"+book.getTitle()+"' and tiengAnh like '%"+keyWord+"%'");
             while(c.moveToNext()){
                 String tiengAnh = c.getString(0);
-                String tiengViet = c.getString(1);
-                list.add(new TuVung(tiengAnh,tiengViet));
+                String phienAm = c.getString(1);
+                String tiengViet = c.getString(2);
+                String group = c.getString(3);
+                list.add(new TuVung(tiengAnh, tiengViet, phienAm, group));
             }
             return list;
         }catch (Exception e){
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
