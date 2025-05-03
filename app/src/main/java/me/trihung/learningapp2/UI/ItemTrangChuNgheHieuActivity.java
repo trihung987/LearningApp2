@@ -80,7 +80,9 @@ public class ItemTrangChuNgheHieuActivity extends AppCompatActivity {
 
         Book book = (Book) bundle.get("ngheHieu_item");
         Integer id = (Integer) bundle.get("id_item");
-        if (id == 2131165414) {
+        String type = (String) bundle.get("book_type");
+
+        if ("listenpart1".equals(type)) {
             soCauAdapter = new SoCauAdapter(this, R.layout.item_selected, getListSoCau());
             spinner.setAdapter(soCauAdapter);
 
@@ -144,6 +146,7 @@ public class ItemTrangChuNgheHieuActivity extends AppCompatActivity {
                             listVoiceMoTaTranh = new ArrayList<NgheHieu>();
                             listDapAn = new ArrayList<NgheHieuMoTaTranh>();
                             Cursor cursor = db.query_hasresult("SELECT * FROM NgheHieu WHERE idNH <= 5 ORDER BY RANDOM() LIMIT " + soLuongCauHoi + "");
+                            Log.d("DEBUG", "Cursor count: " + cursor.getCount());
                             if (cursor.getCount() != 0) {
                                 while (cursor.moveToNext()) {
                                     NgheHieu ngheHieu;
@@ -151,9 +154,9 @@ public class ItemTrangChuNgheHieuActivity extends AppCompatActivity {
                                     String voice = cursor.getString(1);
                                     ngheHieu = new NgheHieu(id, voice);
                                     listVoiceMoTaTranh.add(ngheHieu);
-                                    listDapAn = layDapAn(listVoiceMoTaTranh);
 
                                 }
+                                listDapAn = layDapAn(listVoiceMoTaTranh);
                             } else {
                                 listVoiceMoTaTranh = null;
                             }
@@ -203,7 +206,7 @@ public class ItemTrangChuNgheHieuActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-        } else if (id == 2131165372) {
+        } else if ("listenpart2".equals(type)) {
             soCauAdapter = new SoCauAdapter(this, R.layout.item_selected, getListSoCau());
             spinner.setAdapter(soCauAdapter);
 
@@ -333,8 +336,11 @@ public class ItemTrangChuNgheHieuActivity extends AppCompatActivity {
         try {
             ArrayList<NgheHieuMoTaTranh> listDapAn = new ArrayList<NgheHieuMoTaTranh>();
             NgheHieuMoTaTranh ngheHieuMoTaTranh;
+            Log.d("DEBUG", "So luong cau nghe hieu: " + listVoiceMoTaTranh.size());
+
             for (int i = 0; i < listVoiceMoTaTranh.size(); i++) {
                 Cursor cursor = db.query_hasresult("select * from NgheHieuMoTaTranh WHERE idNH = "+listVoiceMoTaTranh.get(i).getIdNH()+"");
+                Log.d("DEBUG", "Dang lay dap an cho idNH: " + listVoiceMoTaTranh.get(i).getIdNH());
                 String ds = "";
                 if (cursor.getCount() != 0){
                     while (cursor.moveToNext()){
@@ -348,6 +354,7 @@ public class ItemTrangChuNgheHieuActivity extends AppCompatActivity {
                             String dapAnDung = cursor.getString(6);
                             ngheHieuMoTaTranh = new NgheHieuMoTaTranh(new NgheHieu(listVoiceMoTaTranh.get(i).getIdNH(),listVoiceMoTaTranh.get(i).getVoice()),deHinhAnh,dapAnA,dapAnB,dapAnC,dapAnD,dapAnDung);
                             listDapAn.add(ngheHieuMoTaTranh);
+                            Log.d("DEBUG", "Đã thêm đáp án cho idNH: " + idNH + " với đề hình ảnh: " + deHinhAnh);
                         }else {
                             Toast.makeText(this, "Không có đáp án", Toast.LENGTH_SHORT).show();
                         }
@@ -359,6 +366,7 @@ public class ItemTrangChuNgheHieuActivity extends AppCompatActivity {
             return listDapAn;
         }catch (Exception e) {
             e.printStackTrace();
+            Log.e("DEBUG", "Lỗi trong layDapAn: " + e.getMessage());
         }
         return null;
     }

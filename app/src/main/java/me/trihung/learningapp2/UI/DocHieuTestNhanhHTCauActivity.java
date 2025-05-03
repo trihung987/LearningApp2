@@ -9,13 +9,16 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import me.trihung.learningapp2.EnityDB.DocHieuHTDoanVan;
@@ -142,6 +145,25 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
             }
         }
     }
+    private void resetAllAnswerViews() {
+        List<View> answerViews = Arrays.asList(
+                tvA1, tvB1, tvC1, tvD1,
+                tvA2, tvB2, tvC2, tvD2,
+                tvA3, tvB3, tvC3, tvD3,
+                tvA4, tvB4, tvC4, tvD4
+        );
+
+        for (View v : answerViews) {
+            // Reset background
+            v.setBackgroundResource(R.drawable.border_black);
+
+            // Nếu là CompoundButton thì setChecked(false)
+            if (v instanceof CompoundButton) {
+                ((CompoundButton) v).setChecked(false);
+            }
+        }
+    }
+
 
     private void setDataQuestion(DocHieuHTDoanVan docHieuHTDoanVan) {
         // Reset selection tracking
@@ -155,6 +177,9 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
 //        tvCurrent.setText("Question: " + arrayListDe.get(currentQuestion).getIdCau());
 
 //        tvSoCauHoanhThanh.setText(currentQuestion+"/"+arrayListDe.size());
+
+        //reset orange checked
+        resetAllAnswerViews();
         tvA1.setBackgroundResource(R.drawable.border_black);
         tvB1.setBackgroundResource(R.drawable.border_black);
         tvC1.setBackgroundResource(R.drawable.border_black);

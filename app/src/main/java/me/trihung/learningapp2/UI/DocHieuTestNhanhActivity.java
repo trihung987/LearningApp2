@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -103,6 +104,19 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
         tvB.setBackgroundResource(R.drawable.border_black);
         tvC.setBackgroundResource(R.drawable.border_black);
         tvD.setBackgroundResource(R.drawable.border_black);
+        // Clear any selection indicators (orange circles)
+        if (tvA instanceof CompoundButton) {
+            ((CompoundButton) tvA).setChecked(false);
+        }
+        if (tvB instanceof CompoundButton) {
+            ((CompoundButton) tvB).setChecked(false);
+        }
+        if (tvC instanceof CompoundButton) {
+            ((CompoundButton) tvC).setChecked(false);
+        }
+        if (tvD instanceof CompoundButton) {
+            ((CompoundButton) tvD).setChecked(false);
+        }
 
         String cauHoi = "Question "+ currentQuestion + 1;
         tvSoCauHoanhThanh.setText("Câu hỏi: "+currentQuestion+" / "+questionListSize);

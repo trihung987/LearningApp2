@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -138,6 +139,18 @@ public class NgheHieuMTTTestNhanhActivity extends AppCompatActivity implements V
         tvB.setBackgroundResource(R.drawable.border_black);
         tvC.setBackgroundResource(R.drawable.border_black);
         tvD.setBackgroundResource(R.drawable.border_black);
+        if (tvA instanceof CompoundButton) {
+            ((CompoundButton) tvA).setChecked(false);
+        }
+        if (tvB instanceof CompoundButton) {
+            ((CompoundButton) tvB).setChecked(false);
+        }
+        if (tvC instanceof CompoundButton) {
+            ((CompoundButton) tvC).setChecked(false);
+        }
+        if (tvD instanceof CompoundButton) {
+            ((CompoundButton) tvD).setChecked(false);
+        }
 
         String cauHoi = "Question "+ (currentQuestion+1);
         tvSoCauHoanhThanh.setText("Câu hỏi: "+currentQuestion+" / "+questionListSize);
@@ -280,23 +293,24 @@ public class NgheHieuMTTTestNhanhActivity extends AppCompatActivity implements V
         int id = v.getId();
         if (id==R.id.tvA){
             tvA.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(tvA,arrayListDe.get(currentQuestion).getDapAnA(), ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer(tvA,"A", ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
 
         }else if (id == R.id.tvB){
-            tvA.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(tvA,arrayListDe.get(currentQuestion).getDapAnA(), ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
+            tvB.setBackgroundResource(R.drawable.bg_select);
+            checkAnswer(tvB,"B", ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
 
         }else if (id == R.id.tvC){
-            tvB.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(tvB,arrayListDe.get(currentQuestion).getDapAnB(), ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
+            tvC.setBackgroundResource(R.drawable.bg_select);
+            checkAnswer(tvC,"C", ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
 
         }else if (id == R.id.tvD){
-            tvC.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(tvC,arrayListDe.get(currentQuestion).getDapAnC(), ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
+            tvD.setBackgroundResource(R.drawable.bg_select);
+            checkAnswer(tvD,"D", ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
 
         }
 
     }
+
 
     public void checkAnswer(TextView textView,String dapAnChon,NgheHieuMoTaTranh ngheHieuMoTaTranh, String danAn ){
 
@@ -318,6 +332,7 @@ public class NgheHieuMTTTestNhanhActivity extends AppCompatActivity implements V
             }
         },1000);
     }
+
 
     private void gameOver() {
         new Handler().postDelayed(new Runnable() {
