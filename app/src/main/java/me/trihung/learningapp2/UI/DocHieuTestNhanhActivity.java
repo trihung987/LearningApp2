@@ -15,17 +15,21 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import me.trihung.learningapp2.EnityDB.DocHieuHTCau;
-import me.trihung.learningapp2.R;
+import com.airbnb.lottie.LottieAnimationView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
+import me.trihung.learningapp2.EnityDB.DocHieuHTCau;
+import me.trihung.learningapp2.R;
+
 public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView tv_name_user,tvArrowBack,tv_ThoiGian,tvCauHoi,tvSoCauHoanhThanh,tvCurrent,tvA,tvB,tvC,tvD;
+    TextView tv_name_user, tvArrowBack, tv_ThoiGian, tvCauHoi, tvSoCauHoanhThanh, tvCurrent, tvA, tvB, tvC, tvD;
     Button btnXacNhan;
+
+    private LottieAnimationView confettiAnimation;
 
     private long myDataTG;
 
@@ -37,7 +41,7 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
 
     private boolean answered;
     private int currentQuestion = 0;
-    private  ArrayList<DocHieuHTCau> arrayListDe;
+    private ArrayList<DocHieuHTCau> arrayListDe;
     private DocHieuHTCau mDocHieuHTCau;
 
 
@@ -57,7 +61,9 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
         tvA = findViewById(R.id.tvA);
         tvB = findViewById(R.id.tvB);
         tvC = findViewById(R.id.tvC);
-        tvD= findViewById(R.id.tvD);
+        tvD = findViewById(R.id.tvD);
+
+        confettiAnimation = findViewById(R.id.confetti_animation);
 
         tvArrowBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +83,7 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
         Collections.shuffle(arrayListDe);
 
         for (int i = 0; i < arrayListDe.size(); i++) {
-            Log.d("TAG", "Đề"+ ": " + arrayListDe.get(i));
+            Log.d("TAG", "Đề" + ": " + arrayListDe.get(i));
         }
 
         setDataQuestion(arrayListDe.get(currentQuestion));
@@ -95,7 +101,7 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
     }
 
     private void setDataQuestion(DocHieuHTCau docHieuHTCau) {
-        if (docHieuHTCau == null){
+        if (docHieuHTCau == null) {
             return;
         }
         mDocHieuHTCau = docHieuHTCau;
@@ -118,8 +124,8 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
             ((CompoundButton) tvD).setChecked(false);
         }
 
-        String cauHoi = "Question "+ currentQuestion + 1;
-        tvSoCauHoanhThanh.setText("Câu hỏi: "+currentQuestion+" / "+questionListSize);
+        String cauHoi = "Question " + currentQuestion + 1;
+        tvSoCauHoanhThanh.setText("Câu hỏi: " + currentQuestion + " / " + questionListSize);
         tvCurrent.setText(cauHoi);
         tvCauHoi.setText(arrayListDe.get(currentQuestion).getIdDH().getDe());
         tvA.setText(arrayListDe.get(currentQuestion).getDapAnA());
@@ -138,7 +144,7 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
         countDownTimer = new CountDownTimer(myDataTG, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                myDataTG  = millisUntilFinished;
+                myDataTG = millisUntilFinished;
                 //update time
                 updateCountDownText();
             }
@@ -155,13 +161,13 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
     }
 
     private void updateCountDownText() {
-        int minutes = (int) ((myDataTG/1000)/60);
-        int seconds = (int) ((myDataTG/1000)%60);
-        String timeTG = String.format(Locale.getDefault(),"%02d:%02d", minutes,seconds);
+        int minutes = (int) ((myDataTG / 1000) / 60);
+        int seconds = (int) ((myDataTG / 1000) % 60);
+        String timeTG = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
         tv_ThoiGian.setText(timeTG);
         if (myDataTG < 10000) {
             tv_ThoiGian.setTextColor(Color.RED);
-        }else{
+        } else {
             tv_ThoiGian.setTextColor(Color.WHITE);
         }
     }
@@ -170,7 +176,7 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
     public void onBackPressed() {
         super.onBackPressed();
         count++;
-        if (count>=1){
+        if (count >= 1) {
             finishQuestion();
         }
         count = 0;
@@ -191,38 +197,47 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
         int id = v.getId();
         if (id == R.id.tvA) {
             tvA.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer("A",tvA, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer("A", tvA, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
         } else if (id == R.id.tvB) {
             tvB.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer("B",tvB, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer("B", tvB, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
         } else if (id == R.id.tvC) {
             tvC.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer("C",tvC, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer("C", tvC, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
         } else if (id == R.id.tvD) {
             tvD.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer("D",tvD, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer("D", tvD, mDocHieuHTCau, arrayListDe.get(currentQuestion).getDapAnDung());
         }
     }
 
-    public void checkAnswer(String dapandung,TextView textView,DocHieuHTCau docHieuHTCau, String danAn ){
+    public void checkAnswer(String dapandung, TextView textView, DocHieuHTCau docHieuHTCau, String danAn) {
 
-        Log.d("TAG", "checkAnswer: "+textView.getText());
-        Log.d("TAG", "checkAnswer: "+danAn);
-        Log.d("TAG", "checkAnswer: "+docHieuHTCau);
+        Log.d("TAG", "checkAnswer: " + textView.getText());
+        Log.d("TAG", "checkAnswer: " + danAn);
+        Log.d("TAG", "checkAnswer: " + docHieuHTCau);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (dapandung.equals(danAn)){
+                if (dapandung.equals(danAn)) {
                     textView.setBackgroundResource(R.drawable.bg_answer);
                     showCorrect(mDocHieuHTCau);
-                    nextQuestion();
-                }else{
+                    confettiAnimation.setVisibility(View.VISIBLE);
+                    confettiAnimation.playAnimation();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            nextQuestion();
+
+                        }
+                    }, 1000);
+
+                } else {
                     textView.setBackgroundResource(R.drawable.bg_sai);
                     showCorrect(docHieuHTCau);
                     gameOver();
                 }
             }
-        },1000);
+        }, 1000);
     }
 
     private void gameOver() {
@@ -231,7 +246,7 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
             public void run() {
                 showDiaLog("Đán án bạn vừa chọn là sai, vui lòng chọn lại!");
             }
-        },500);
+        }, 500);
     }
 
     private void showCorrect(DocHieuHTCau mDocHieuHTCau) {
@@ -250,18 +265,18 @@ public class DocHieuTestNhanhActivity extends AppCompatActivity implements View.
 
 
     private void nextQuestion() {
-        if (currentQuestion == arrayListDe.size() -1){
+        if (currentQuestion == arrayListDe.size() - 1) {
             showDiaLog("Hoàn thành tất cả các câu");
             Intent intent = new Intent(DocHieuTestNhanhActivity.this, ResultDocHieuActivity.class);
             startActivity(intent);
-        }else{
+        } else {
             currentQuestion++;
             setDataQuestion(arrayListDe.get(currentQuestion));
         }
 
     }
 
-    private void showDiaLog(String message){
+    private void showDiaLog(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message);
         builder.setCancelable(false);

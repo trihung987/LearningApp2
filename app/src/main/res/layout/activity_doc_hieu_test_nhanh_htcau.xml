@@ -491,4 +491,13 @@
             app:elevation="4dp" />
 
     </RelativeLayout>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/confetti_animation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:lottie_autoPlay="false"
+        android:translationZ="20dp"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/suprise"/>
 </ScrollView>

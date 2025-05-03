@@ -15,6 +15,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,7 +29,7 @@ import me.trihung.learningapp2.R;
 public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements View.OnClickListener {
     TextView tv_name_user, tvArrowBack, tv_ThoiGian, tvCauHoi, tvSoCauHoanhThanh, tvCurrent, tvA1, tvB1, tvC1, tvD1, tvA2, tvB2, tvC2, tvD2, tvA3, tvB3, tvC3, tvD3, tvA4, tvB4, tvC4, tvD4;
     Button btnXacNhan;
-
+    private LottieAnimationView confettiAnimation;
     private long myDataTG;
 
     private int count = 0;
@@ -75,6 +77,8 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
         tvB4 = findViewById(R.id.tvB4);
         tvC4 = findViewById(R.id.tvC4);
         tvD4 = findViewById(R.id.tvD4);
+
+        confettiAnimation = findViewById(R.id.confetti_animation);
 
         tvArrowBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -351,12 +355,11 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
                 if (dapAnChon.equalsIgnoreCase(dapAnDung)) {
                     textView.setBackgroundResource(R.drawable.bg_answer);
                     showCorrect(cauHoi);
-
-                    // Wait for 3 seconds after showCorrect completes
+                    confettiAnimation.setVisibility(View.VISIBLE);
+                    confettiAnimation.playAnimation();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            // Code to execute after the 3-second delay
                             answeredQuestionsCount++; // If you're tracking answered questions
 
                             // Check if all questions on this page are answered
@@ -367,7 +370,7 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
                                 nextQuestion();
                             }
                         }
-                    }, 3000); // 3 seconds delay
+                    }, 2000); // 2 seconds delay
 
                 } else {
                     textView.setBackgroundResource(R.drawable.bg_sai);
