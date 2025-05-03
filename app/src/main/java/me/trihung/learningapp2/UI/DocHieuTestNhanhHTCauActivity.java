@@ -131,7 +131,22 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
             questionIndex = currentQuestion + 3;
             groupIndex = 3;
         }
-
+        if (groupIndex==0){
+            if (q1)
+                return;
+        }
+        if (groupIndex==1){
+            if (q2)
+                return;
+        }
+        if (groupIndex==2){
+            if (q3)
+                return;
+        }
+        if (groupIndex==3){
+            if (q4)
+                return;
+        }
         if (questionIndex != -1 && questionIndex < arrayListDe.size()) {
             selectedTextView = findViewById(id);
             answerLetter = getAnswerLetterFromId(id); // Lấy A/B/C/D từ id
@@ -156,6 +171,10 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
                 tvA3, tvB3, tvC3, tvD3,
                 tvA4, tvB4, tvC4, tvD4
         );
+        q1 = false;
+        q2 = false;
+        q3 = false;
+        q4 = false;
 
         for (View v : answerViews) {
             // Reset background
@@ -168,6 +187,10 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
         }
     }
 
+    Boolean q1 = false;
+    Boolean q2 = false;
+    Boolean q3 = false;
+    Boolean q4 = false;
 
     private void setDataQuestion(DocHieuHTDoanVan docHieuHTDoanVan) {
         // Reset selection tracking
@@ -370,19 +393,18 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
                                 nextQuestion();
                             }
                         }
-                    }, 2000); // 2 seconds delay
+                    }, 1000); // 2 seconds delay
 
                 } else {
                     textView.setBackgroundResource(R.drawable.bg_sai);
                     showCorrect(cauHoi);
 
-                    // Wait for 3 seconds before showing game over dialog
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             gameOver();
                         }
-                    }, 3000); // 3 seconds delay
+                    }, 200); //
                 }
             }
         }, 1000); // Original 1 second delay
@@ -394,7 +416,7 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
             public void run() {
                 showDiaLog("Rất tiếp bạn vừa chọn đán án sai !");
             }
-        }, 500);
+        }, 200);
     }
 
     private void showCorrect(DocHieuHTDoanVan mDocHieuHTDoanVan) {
@@ -451,7 +473,7 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
         if (questionIndex < arrayListDe.size()) {
             selectedTextView = findViewById(id);
             if (selectedTextView != null) {
-                selectedTextView.setBackgroundResource(R.drawable.bg_select);
+                //selectedTextView.setBackgroundResource(R.drawable.bg_select);
 
                 String dapAnChon = getAnswerLetterFromId(id);  //  Lấy A/B/C/D từ ID
                 String dapAnDung = arrayListDe.get(questionIndex).getDapAnDung();
@@ -459,6 +481,15 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
 
                 if (dapAnChon != null) {
                     checkAnswer(dapAnChon, selectedTextView, cauHoi, dapAnDung);
+                    if (questionIndex==0){
+                        q1 = true;
+                    }else if (questionIndex==1){
+                        q2 = true;
+                    }else if (questionIndex==2){
+                        q3 = true;
+                    }else {
+                        q4 = true;
+                    }
                 }
             }
         }
