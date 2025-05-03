@@ -18,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.airbnb.lottie.LottieAnimationView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -209,6 +210,7 @@ public class FlashCardActivity extends AppCompatActivity {
                 String group = c.getString(3);
                 list.add(new TuVung(tiengAnh, tiengViet, phienAm, group));
             }
+            Collections.shuffle(list);
             return list;
         } catch (Exception e) {
             e.printStackTrace();
