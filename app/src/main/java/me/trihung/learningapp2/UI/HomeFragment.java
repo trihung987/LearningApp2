@@ -179,8 +179,8 @@ public class HomeFragment extends Fragment {
     private List<Book> getListCategoryNH() {
 
         List<Book> bookListNgheHieu = new ArrayList<>();
-        bookListNgheHieu.add(new Book( R.drawable.mo_ta_anh,"Mô Tả Tranh"));
-        bookListNgheHieu.add(new Book( R.drawable.hoi_dap,"Hỏi Đáp"));
+        bookListNgheHieu.add(new Book( R.drawable.mo_ta_anh,"Mô Tả Tranh","listenpart1"));
+        bookListNgheHieu.add(new Book( R.drawable.hoi_dap,"Hỏi Đáp","listenpart2"));
         return bookListNgheHieu;
     }
 
@@ -232,7 +232,7 @@ public class HomeFragment extends Fragment {
         Intent intent = new Intent(getContext(), ItemTrangChuNgheHieuActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("ngheHieu_item", book);
-        bundle.putSerializable("id_item", book.getResoutceId());
+        bundle.putSerializable("book_type", book.getType());
         intent.putExtras(bundle);
         startActivity(intent);
     }
