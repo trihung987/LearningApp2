@@ -488,6 +488,7 @@ public class NgheHieuHDTestNhanhActivity extends AppCompatActivity implements Vi
     private void nextQuestion() {
         if (currentQuestion == arrayListDe.size() -1){
             showDiaLog("Hoàn thành tất cả các câu");
+            mp.pause();
             Intent intent = new Intent(NgheHieuHDTestNhanhActivity.this, ResultNgheHieuActivity.class);
             startActivity(intent);
         }else{
