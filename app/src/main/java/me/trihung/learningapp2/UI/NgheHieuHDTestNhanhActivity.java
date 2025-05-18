@@ -11,12 +11,15 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.airbnb.lottie.LottieAnimationView;
 
 import me.trihung.learningapp2.EnityDB.NgheHieuHoiDap;
 import me.trihung.learningapp2.R;
@@ -29,6 +32,8 @@ public class NgheHieuHDTestNhanhActivity extends AppCompatActivity implements Vi
 
     TextView tv_name_user,tvArrowBack,tv_ThoiGian,tvSoCauHoanhThanh,tvCurrent,tvA,tvB,tvC,tvThoiGianPlay,tvThoiGianAudio;
     Button btnXacNhan;
+
+    private LottieAnimationView confettiAnimation;
     ImageButton btnPlay;
     MediaPlayer mp=null;
     SeekBar sbVoice;
@@ -43,6 +48,8 @@ public class NgheHieuHDTestNhanhActivity extends AppCompatActivity implements Vi
     private int score;
     private int sourceID;
     private Thread t;
+
+    private CountDownTimer c;
 
     private boolean answered;
     private int currentQuestion = 0;
@@ -66,6 +73,7 @@ public class NgheHieuHDTestNhanhActivity extends AppCompatActivity implements Vi
         btnPlay.setImageResource(sourceID);
         tvThoiGianAudio = findViewById(R.id.tvThoiGianAudio);
         tvThoiGianPlay = findViewById(R.id.tvThoiGianPlay);
+      //  confettiAnimation = findViewById(R.id.confetti_animation);
 
 
         tvA = findViewById(R.id.tvA);
@@ -107,38 +115,111 @@ public class NgheHieuHDTestNhanhActivity extends AppCompatActivity implements Vi
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CountDownTimer c = countDownAudio();
                 if(sourceID == android.R.drawable.ic_media_play){
                     btnPlay.setImageResource(android.R.drawable.ic_media_pause);
+
+                    // Check if audio has finished playing - need to reset to beginning
+                    if (mp != null && !mp.isPlaying() && mp.getCurrentPosition() >= mp.getDuration() - 100) {
+                        mp.seekTo(0);
+                        sbVoice.setProgress(0);
+                        tvThoiGianPlay.setText("00:00");
+                    }
+
                     mp.start();
-                    c.start();
-                    chaySeekBar();
+                    if (c == null) {
+                        c = countDownAudio();
+                        c.start();
+                    } else {
+                        // No need to cancel and recreate the timer when resuming
+                        // The timer will continue from where it left off
+                        c.start();
+                    }
+
+                    if (t == null || !t.isAlive()) {
+                        chaySeekBar();
+                    }
+
                     sourceID = android.R.drawable.ic_media_pause;
+
                 } else{
                     btnPlay.setImageResource(android.R.drawable.ic_media_play);
                     mp.pause();
-                    c.cancel();
+                    // Pause the timer but don't reset it
+                    if (c != null) {
+                        c.cancel();
+                    }
+
+                    // We don't need to interrupt the thread - it will check if mp.isPlaying()
+                    // and stop updating if the player is paused
+
                     sourceID = android.R.drawable.ic_media_play;
                 }
             }
         });
     }
+    private void resetMediaPlayer() {
+        // Reset any existing MediaPlayer
+        if (mp != null) {
+            if (mp.isPlaying()) {
+                mp.stop();
+            }
+            mp.release();
+            mp = null;
+        }
+
+        // Reset SeekBar and timer
+        sbVoice.setProgress(0);
+        tvThoiGianPlay.setText("00:00");
+
+        // Reset UI
+        resetAudioPlaybackUI();
+
+        // Cancel any running threads or timers
+        if (t != null) {
+            t.interrupt();
+            t = null;
+        }
+        if (c != null) {
+            c.cancel();
+            c = null;
+        }
+    }
+
 
     private void setDataQuestion(NgheHieuHoiDap ngheHieuMoTaTranh1) {
         if (ngheHieuMoTaTranh1 == null){
             return;
         }
         ngheHieuMoTaTranh = ngheHieuMoTaTranh1;
+        resetMediaPlayer();
 
         tvA.setBackgroundResource(R.drawable.border_black);
         tvB.setBackgroundResource(R.drawable.border_black);
         tvC.setBackgroundResource(R.drawable.border_black);
+
+        if (tvA instanceof CompoundButton) {
+            ((CompoundButton) tvA).setChecked(false);
+        }
+        if (tvB instanceof CompoundButton) {
+            ((CompoundButton) tvB).setChecked(false);
+        }
+        if (tvC instanceof CompoundButton) {
+            ((CompoundButton) tvC).setChecked(false);
+        }
+
 
         String cauHoi = "Question "+ (currentQuestion+1);
         tvSoCauHoanhThanh.setText("Câu hỏi: "+currentQuestion+" / "+questionListSize);
         tvCurrent.setText(cauHoi);
         int resourceId = getResources().getIdentifier(arrayListDe.get(currentQuestion).getIdNH().getVoice(), "raw", getPackageName());
         mp = MediaPlayer.create(NgheHieuHDTestNhanhActivity.this, resourceId);
+        // Set MediaPlayer completion listener to reset UI when audio ends
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                resetAudioPlaybackUI();
+            }
+        });
         int minutes = (int) ((mp.getDuration()/1000)/60);
         int seconds = (int) ((mp.getDuration()/1000)%60);
         String timeTG = String.format(Locale.getDefault(),"%02d:%02d", minutes,seconds);
@@ -150,6 +231,17 @@ public class NgheHieuHDTestNhanhActivity extends AppCompatActivity implements Vi
         tvA.setOnClickListener(this);
         tvB.setOnClickListener(this);
         tvC.setOnClickListener(this);
+    }
+    private void resetAudioPlaybackUI() {
+        // Reset play button image and state
+        sourceID = android.R.drawable.ic_media_play;
+        btnPlay.setImageResource(sourceID);
+//        if (mp!=null)
+//            mp.reset();
+        // Reset SeekBar
+        sbVoice.setProgress(0);
+
+        //resetMediaPlayer();
     }
 
     private void startCountDown() {
@@ -229,30 +321,78 @@ public class NgheHieuHDTestNhanhActivity extends AppCompatActivity implements Vi
     }
 
     private void chaySeekBar() {
-//        final SeekBar mSeelBar = new SeekBar(this);
         final int duration = mp.getDuration();
-        final int amoungToupdate = duration / 1000;
-        sbVoice.setMax(amoungToupdate);
+        final int amountToUpdate = duration / 1000;
+        sbVoice.setMax(amountToUpdate);
+
+        // Set the initial position of the seekbar based on the current position
+        int initialProgress = mp.getCurrentPosition() / 1000;
+        sbVoice.setProgress(initialProgress);
+
+        // Interrupt any existing thread
+        if (t != null && t.isAlive()) {
+            t.interrupt();
+            try {
+                t.join(500); // Wait for thread to terminate
+            } catch (InterruptedException e) {
+                // Ignore
+            }
+        }
+
         t = new Thread(new Runnable() {
             @Override
             public void run() {
-                SystemClock.sleep(1000);
-                for (int i = 0; i < duration / 1000; i++) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!(amoungToupdate * sbVoice.getProgress() >= duration)) {
-                                int p = sbVoice.getProgress();
-                                p += 1;
-                                sbVoice.setProgress(p);
+                boolean wasInterrupted = false;
+
+                while (!wasInterrupted && mp != null) {
+                    // Check if thread was interrupted
+                    if (Thread.currentThread().isInterrupted()) {
+                        wasInterrupted = true;
+                        break;
+                    }
+
+                    // Only update if MediaPlayer is playing
+                    if (mp != null && mp.isPlaying()) {
+                        try {
+                            final int currentPosition = mp.getCurrentPosition();
+                            final int progress = currentPosition / 1000;
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (sbVoice != null) {
+                                        sbVoice.setProgress(progress);
+                                    }
+                                }
+                            });
+
+                            // Check if we've reached the end
+                            if (mp != null && mp.getCurrentPosition() >= mp.getDuration() - 100) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        resetAudioPlaybackUI();
+                                    }
+                                });
+                                break;
                             }
+                        } catch (IllegalStateException e) {
+                            // MediaPlayer might be in an invalid state
+                            break;
                         }
-                    });
-                    SystemClock.sleep(1000);
+                    }
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        wasInterrupted = true;
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
                 }
             }
-
         });
+
         t.start();
     }
 
@@ -271,15 +411,15 @@ public class NgheHieuHDTestNhanhActivity extends AppCompatActivity implements Vi
         int id = v.getId();
         if (id==R.id.tvA){
             tvA.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(tvA,arrayListDe.get(currentQuestion).getDapAnA(), ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer(tvA,"A", ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
 
-        }else if (id==R.id.tvA){
+        }else if (id==R.id.tvB){
             tvB.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(tvB,arrayListDe.get(currentQuestion).getDapAnB(), ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer(tvB,"B", ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
 
         }else if (id==R.id.tvC){
             tvC.setBackgroundResource(R.drawable.bg_select);
-            checkAnswer(tvC,arrayListDe.get(currentQuestion).getDapAnC(), ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
+            checkAnswer(tvC,"C", ngheHieuMoTaTranh,arrayListDe.get(currentQuestion).getDapAnDung());
 
         }
 //        switch (v.getId()){
@@ -309,7 +449,14 @@ public class NgheHieuHDTestNhanhActivity extends AppCompatActivity implements Vi
                 if (dapAnChon.equals(danAn)){
                     textView.setBackgroundResource(R.drawable.bg_answer);
                     showCorrect(ngheHieuMoTaTranh);
-                    nextQuestion();
+                 //   confettiAnimation.setVisibility(View.VISIBLE);
+                 //   confettiAnimation.playAnimation();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            nextQuestion();
+                        }
+                    }, 1500); // Trễ 1.5 giây trước khi nextQuestion
                 }else{
                     textView.setBackgroundResource(R.drawable.bg_sai);
 //                    showCorrect(ngheHieuMoTaTranh);

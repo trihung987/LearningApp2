@@ -3,6 +3,7 @@ package me.trihung.learningapp2.UI;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -19,17 +20,23 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import me.trihung.learningapp2.EnityDB.NgheHieuMoTaTranh;
 import me.trihung.learningapp2.R;
 
 public class NgheHieuMTTTestNhanhActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private Set<TextView> disabledViews = new HashSet<>();
+    private boolean correctAnswerSelected = false;
 
     TextView tv_name_user, tvArrowBack, tv_ThoiGian, tvSoCauHoanhThanh, tvCurrent, tvA, tvB, tvC, tvD, tvThoiGianPlay, tvThoiGianAudio;
     ImageView tvCauHoi;
@@ -188,6 +195,9 @@ public class NgheHieuMTTTestNhanhActivity extends AppCompatActivity implements V
         if (tvD instanceof CompoundButton) {
             ((CompoundButton) tvD).setChecked(false);
         }
+
+        disabledViews.clear();
+        correctAnswerSelected = false;
 
         String cauHoi = "Question " + (currentQuestion + 1);
         tvSoCauHoanhThanh.setText("Câu hỏi: " + currentQuestion + " / " + questionListSize);
@@ -426,21 +436,35 @@ public class NgheHieuMTTTestNhanhActivity extends AppCompatActivity implements V
     @Override
     public void onClick(View v) {
         int id = v.getId();
+
+        // Nếu đã chọn đáp án đúng, không cho click gì cả
+        if (correctAnswerSelected) {
+            return;
+        }
+        // Nếu view đã bị vô hiệu hóa (đã click trước đó), không làm gì cả
+        if (disabledViews.contains(v)) {
+            return;
+        }
+
         if (id == R.id.tvA) {
             tvA.setBackgroundResource(R.drawable.bg_select);
             checkAnswer(tvA, "A", ngheHieuMoTaTranh, arrayListDe.get(currentQuestion).getDapAnDung());
+            disabledViews.add(tvA);
 
         } else if (id == R.id.tvB) {
             tvB.setBackgroundResource(R.drawable.bg_select);
             checkAnswer(tvB, "B", ngheHieuMoTaTranh, arrayListDe.get(currentQuestion).getDapAnDung());
+            disabledViews.add(tvB);
 
         } else if (id == R.id.tvC) {
             tvC.setBackgroundResource(R.drawable.bg_select);
             checkAnswer(tvC, "C", ngheHieuMoTaTranh, arrayListDe.get(currentQuestion).getDapAnDung());
+            disabledViews.add(tvC);
 
         } else if (id == R.id.tvD) {
             tvD.setBackgroundResource(R.drawable.bg_select);
             checkAnswer(tvD, "D", ngheHieuMoTaTranh, arrayListDe.get(currentQuestion).getDapAnDung());
+            disabledViews.add(tvD);
         }
     }
 
