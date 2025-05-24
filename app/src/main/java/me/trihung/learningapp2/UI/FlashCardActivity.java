@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -11,7 +12,9 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -38,7 +41,7 @@ public class FlashCardActivity extends AppCompatActivity {
     private ImageButton prevButton;
     private ImageButton nextButton;
     private ImageButton soundButton;
-    private ImageButton bookmarkButton;
+    private ImageButton bookmarkButton, btnBack;
     private ProgressBar progressBar;
     private TextView progressText;
     private LottieAnimationView confettiAnimation;
@@ -78,6 +81,7 @@ public class FlashCardActivity extends AppCompatActivity {
         progressText = findViewById(R.id.progress_text);
         confettiAnimation = findViewById(R.id.confetti_animation);
         mainLayout = findViewById(R.id.flashcard_layout);
+        btnBack = findViewById(R.id.btnBack);
 
         vietnameseTextView.setVisibility(View.INVISIBLE);
         transcriptionTextView.setVisibility(View.INVISIBLE);
@@ -90,6 +94,17 @@ public class FlashCardActivity extends AppCompatActivity {
         updateProgress();
 
         //setRandomBackground();
+
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//
+//// Enable the Up button
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        }
+
+        btnBack.setOnClickListener(v -> finish());
 
         displayFlashcard(currentCardIndex);
 
@@ -176,6 +191,7 @@ public class FlashCardActivity extends AppCompatActivity {
 
 
     }
+
 
     private void setRandomBackground() {
         String randomGradient = gradientBackgrounds[new Random().nextInt(gradientBackgrounds.length)];

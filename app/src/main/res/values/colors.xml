@@ -19,7 +19,84 @@
     <color name="primaryDark">#00A3D4</color>
     <color name="accent">#03DAC5</color>
 
+    <!--Reading 1-->
+    <color name="primary2">#6200EE</color>
+    <color name="primary_dark2">#3700B3</color>
+    <color name="primary_light2">#BB86FC</color>
+    <color name="accent2">#03DAC5</color>
+    <color name="background2">#F5F5F5</color>
+    <color name="text_primary2">#212121</color>
+    <color name="text_secondary2">#757575</color>
+    <color name="white2">#FFFFFF</color>
 
+    <!--Speaking 1-->
+
+    <color name="lavender3">#7555CF</color>
+    <color name="lavender_light3">#9C7FE8</color>
+    <color name="record_button3">#FF5252</color>
+    <color name="background3">#F8F9FF</color>
+    <color name="text_primary3">#333333</color>
+    <color name="text_secondary3">#485257</color>
+    <color name="text_ipa3">#2B3C9E</color>
+    <color name="white3">#FFFFFF</color>
+
+    <!-- Pronunciation feedback colors -->
+    <color name="correct_background3">#E0F7E9</color>
+    <color name="correct_text3">#1F8B4D</color>
+    <color name="percent3">#2CA660</color>
+    <color name="incorrect_background3">#FFE6E6</color>
+    <color name="incorrect_text3">#D32F2F</color>
+
+    <!-- Advance search feedback colors -->
+
+    <!-- Primary Colors -->
+    <color name="primary_color">#4649B4</color>
+    <color name="primary_light">#A5B4FC</color>
+    <color name="primary_dark">#4F46E5</color>
+
+    <!-- Secondary Colors -->
+    <color name="secondary_color">#10B981</color>
+    <color name="secondary_light">#6EE7B7</color>
+    <color name="secondary_dark">#059669</color>
+
+        <!-- Background Colors -->
+    <color name="background_primary">#F8FAFC</color>
+    <color name="background_secondary">#F1F5F9</color>
+    <color name="input_background">#F8FAFC</color>
+
+        <!-- Text Colors -->
+    <color name="text_primary">#1E293B</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="text_hint">#94A3B8</color>
+
+        <!-- Status Colors -->
+    <color name="success_bg">#ECFDF5</color>
+    <color name="success_text">#065F46</color>
+    <color name="error_bg">#FEF2F2</color>
+    <color name="error_text">#991B1B</color>
+    <color name="error_background">#C17171</color>
+    <color name="warning_bg">#FFFBEB</color>
+    <color name="warning_text">#92400E</color>
+
+        <!-- Gray Scale -->
+    <color name="gray_100">#F1F5F9</color>
+    <color name="gray_200">#E2E8F0</color>
+    <color name="gray_300">#CBD5E1</color>
+    <color name="gray_400">#94A3B8</color>
+    <color name="gray_500">#64748B</color>
+    <color name="gray_light">#CBD5E1</color>
+
+        <!-- Gradient Colors -->
+    <color name="gradient_start">#6366F1</color>
+    <color name="gradient_center">#8B5CF6</color>
+    <color name="gradient_end">#EC4899</color>
+
+        <!-- Shadow -->
+    <color name="shadow_light">#1A000000</color>
+    <color name="shadow_medium">#33000000</color>
+
+        <!-- Transparent -->
+    <color name="transparent">#00000000</color>
 
 
 
