@@ -108,6 +108,22 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(getContext(), FlashCardActivity.class);
             startActivity(intent);
         });
+        view.findViewById(R.id.cardSearch).setOnClickListener((v)->{
+            Intent intent = new Intent(getContext(), VocabularySearchActivity.class);
+            startActivity(intent);
+        });
+
+        //Writing
+        view.findViewById(R.id.writing1).setOnClickListener((v)->{
+            Intent intent = new Intent(getContext(), WritingReviewActivity.class);
+            startActivity(intent);
+        });
+
+        //Luyện nói
+        view.findViewById(R.id.speaking1).setOnClickListener((v)->{
+            Intent intent = new Intent(getContext(), SpeakingPronounciationActivity.class);
+            startActivity(intent);
+        });
 
 
         //NGHE HIỂU

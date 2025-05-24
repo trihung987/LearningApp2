@@ -20,13 +20,20 @@ import com.airbnb.lottie.LottieAnimationView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import me.trihung.learningapp2.EnityDB.DocHieuHTDoanVan;
 import me.trihung.learningapp2.R;
 
 public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements View.OnClickListener {
+
+    // Thêm biến để theo dõi các nút đã click
+    private Set<Integer> clickedButtonIds = new HashSet<>();
+    private Set<Integer> correctlyAnsweredGroups = new HashSet<>(); // Theo dõi các nhóm đã trả lời đúng
+
     TextView tv_name_user, tvArrowBack, tv_ThoiGian, tvCauHoi, tvSoCauHoanhThanh, tvCurrent, tvA1, tvB1, tvC1, tvD1, tvA2, tvB2, tvC2, tvD2, tvA3, tvB3, tvC3, tvD3, tvA4, tvB4, tvC4, tvD4;
     Button btnXacNhan;
     private LottieAnimationView confettiAnimation;
@@ -113,6 +120,9 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        if (clickedButtonIds.contains(id)) {
+            return; // Nếu nút đã được click, không làm gì cả
+        }
         int questionIndex = -1;
         String answerLetter = null;
         TextView selectedTextView = null;
@@ -131,6 +141,13 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
             questionIndex = currentQuestion + 3;
             groupIndex = 3;
         }
+
+        // Kiểm tra nếu nhóm câu hỏi này đã được trả lời đúng
+        if (correctlyAnsweredGroups.contains(groupIndex)) {
+            return; // Nếu đã trả lời đúng nhóm này, không cho phép click nữa
+        }
+
+
         if (groupIndex==0){
             if (q1)
                 return;
@@ -160,7 +177,11 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
                 // Set this as the new selected answer for this question
                 selectedAnswers[groupIndex] = selectedTextView;
                 selectedTextView.setBackgroundResource(R.drawable.bg_select);
-                checkAnswer(answerLetter, selectedTextView, arrayListDe.get(questionIndex), arrayListDe.get(questionIndex).getDapAnDung());
+
+                //add button checked into Set for tracking
+                clickedButtonIds.add(id);
+
+                checkAnswer(answerLetter, selectedTextView, arrayListDe.get(questionIndex), arrayListDe.get(questionIndex).getDapAnDung(),groupIndex);
             }
         }
     }
@@ -211,21 +232,75 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
         tvB1.setBackgroundResource(R.drawable.border_black);
         tvC1.setBackgroundResource(R.drawable.border_black);
         tvD1.setBackgroundResource(R.drawable.border_black);
+        if (tvA1 instanceof CompoundButton) {
+            ((CompoundButton) tvA1).setChecked(false);
+        }
+        if (tvB1 instanceof CompoundButton) {
+            ((CompoundButton) tvB1).setChecked(false);
+        }
+        if (tvC1 instanceof CompoundButton) {
+            ((CompoundButton) tvC1).setChecked(false);
+        }
+        if (tvD1 instanceof CompoundButton) {
+            ((CompoundButton) tvD1).setChecked(false);
+        }
 
         tvA2.setBackgroundResource(R.drawable.border_black);
         tvB2.setBackgroundResource(R.drawable.border_black);
         tvC2.setBackgroundResource(R.drawable.border_black);
         tvD2.setBackgroundResource(R.drawable.border_black);
 
+        if (tvA2 instanceof CompoundButton) {
+            ((CompoundButton) tvA2).setChecked(false);
+        }
+        if (tvB2 instanceof CompoundButton) {
+            ((CompoundButton) tvB2).setChecked(false);
+        }
+        if (tvC2 instanceof CompoundButton) {
+            ((CompoundButton) tvC2).setChecked(false);
+        }
+        if (tvD2 instanceof CompoundButton) {
+            ((CompoundButton) tvD2).setChecked(false);
+        }
+
         tvA3.setBackgroundResource(R.drawable.border_black);
         tvB3.setBackgroundResource(R.drawable.border_black);
         tvC3.setBackgroundResource(R.drawable.border_black);
         tvD3.setBackgroundResource(R.drawable.border_black);
 
+        if (tvA3 instanceof CompoundButton) {
+            ((CompoundButton) tvA3).setChecked(false);
+        }
+        if (tvB3 instanceof CompoundButton) {
+            ((CompoundButton) tvB3).setChecked(false);
+        }
+        if (tvC3 instanceof CompoundButton) {
+            ((CompoundButton) tvC3).setChecked(false);
+        }
+        if (tvD3 instanceof CompoundButton) {
+            ((CompoundButton) tvD3).setChecked(false);
+        }
+
         tvA4.setBackgroundResource(R.drawable.border_black);
         tvB4.setBackgroundResource(R.drawable.border_black);
         tvC4.setBackgroundResource(R.drawable.border_black);
         tvD4.setBackgroundResource(R.drawable.border_black);
+
+        if (tvA4 instanceof CompoundButton) {
+            ((CompoundButton) tvA4).setChecked(false);
+        }
+        if (tvB4 instanceof CompoundButton) {
+            ((CompoundButton) tvB4).setChecked(false);
+        }
+        if (tvC4 instanceof CompoundButton) {
+            ((CompoundButton) tvC4).setChecked(false);
+        }
+        if (tvD4 instanceof CompoundButton) {
+            ((CompoundButton) tvD4).setChecked(false);
+        }
+
+        clickedButtonIds.clear();
+        correctlyAnsweredGroups.clear();
 
         String cauHoi = "Question " + currentQuestion + 1;
 //        tvSoCauHoanhThanh.setText("Câu hỏi: "+currentQuestion+" / "+questionListSize);
@@ -367,7 +442,7 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
     }
 
 
-    public void checkAnswer(String dapAnChon, TextView textView, DocHieuHTDoanVan cauHoi, String dapAnDung) {
+    public void checkAnswer(String dapAnChon, TextView textView, DocHieuHTDoanVan cauHoi, String dapAnDung,int groupIndex) {
         Log.d("TAG", "checkAnswer: " + dapAnChon);
         Log.d("TAG", "checkAnswer: " + dapAnDung);
         Log.d("TAG", "checkAnswer: " + cauHoi);
@@ -377,6 +452,8 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
             public void run() {
                 if (dapAnChon.equalsIgnoreCase(dapAnDung)) {
                     textView.setBackgroundResource(R.drawable.bg_answer);
+                    // Đánh dấu nhóm này đã trả lời đúng
+                    correctlyAnsweredGroups.add(groupIndex);
                     showCorrect(cauHoi);
                     confettiAnimation.setVisibility(View.VISIBLE);
                     confettiAnimation.playAnimation();
@@ -480,7 +557,7 @@ public class DocHieuTestNhanhHTCauActivity extends AppCompatActivity implements 
                 DocHieuHTDoanVan cauHoi = arrayListDe.get(questionIndex);
 
                 if (dapAnChon != null) {
-                    checkAnswer(dapAnChon, selectedTextView, cauHoi, dapAnDung);
+                    checkAnswer(dapAnChon, selectedTextView, cauHoi, dapAnDung,questionIndex);
                     if (questionIndex==0){
                         q1 = true;
                     }else if (questionIndex==1){

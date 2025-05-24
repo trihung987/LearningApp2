@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class TuVungChuDeActivity extends AppCompatActivity {
     private Database db;
     private RecyclerView recyclerViewTV;
     private BookAdapter categoryAdapterTV;
+    private TextView btnBack;
     private TextView editTimChuDe;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +59,9 @@ public class TuVungChuDeActivity extends AppCompatActivity {
         categoryAdapterTV.setData(getListCategoryTV(""));
         recyclerViewTV.setAdapter(categoryAdapterTV);
         editTimChuDe = findViewById(R.id.edtTimChuDe);
+        btnBack = findViewById(R.id.tvArrowBack);
+        btnBack.setOnClickListener(v->finish());
+
         editTimChuDe.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
